@@ -1,0 +1,5 @@
+Contact: mailto:jordan.s.howson@gmail.com
+Contact: https://www.linkedin.com/in/jordan-howson/
+Expires: 2027-06-21T00:00:00Z
+Preferred-Languages: en
+Canonical: https://jordanhowson.com/.well-known/security.txt
