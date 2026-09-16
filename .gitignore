@@ -1,0 +1,4 @@
+# Local tooling and OS/editor cruft, not part of the published site
+.claude/
+.DS_Store
+Thumbs.db
