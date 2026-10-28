@@ -9,6 +9,15 @@
 $ErrorActionPreference = "Stop"
 $root = Split-Path -Parent $PSScriptRoot
 
+function Get-AvailablePort {
+  $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Loopback, 0)
+  $listener.Start()
+  try { return $listener.LocalEndpoint.Port } finally { $listener.Stop() }
+}
+$httpPort = Get-AvailablePort
+$debugPort = Get-AvailablePort
+while ($debugPort -eq $httpPort) { $debugPort = Get-AvailablePort }
+
 $candidates = @(
   "$env:ProgramFiles\BraveSoftware\Brave-Browser\Application\brave.exe",
   "$env:LOCALAPPDATA\BraveSoftware\Brave-Browser\Application\brave.exe",
@@ -24,16 +33,17 @@ if (-not $browser) { throw "No Chromium browser (Brave, Chrome, or Edge) found."
 $profile = Join-Path $env:TEMP ("cv-pdf-" + [guid]::NewGuid().ToString("N").Substring(0, 8))
 New-Item -ItemType Directory -Force $profile | Out-Null
 
-$server = Start-Process python -ArgumentList "-m", "http.server", "8765" `
+$server = Start-Process python -ArgumentList "-m", "http.server", "$httpPort", "--bind", "127.0.0.1" `
   -WorkingDirectory $root -PassThru -WindowStyle Hidden
 $chromium = $null
 try {
   Start-Sleep -Seconds 2
+  if ($server.HasExited) { throw "The portfolio preview server failed to start." }
   $chromium = Start-Process $browser -ArgumentList ("--headless --disable-gpu --no-proxy-server " +
-    "--disable-extensions --remote-debugging-port=9333 --remote-allow-origins=* " +
+    "--disable-extensions --remote-debugging-port=$debugPort --remote-allow-origins=* " +
     "`"--user-data-dir=$profile`" about:blank") -PassThru -WindowStyle Hidden
   Start-Sleep -Seconds 4
-  python "$root\scripts\cdp-print.py" 9333 "http://127.0.0.1:8765/" "$root\assets\jordan-howson-cv.pdf"
+  python "$root\scripts\cdp-print.py" $debugPort "http://127.0.0.1:$httpPort/" "$root\assets\jordan-howson-cv.pdf"
   if ($LASTEXITCODE -ne 0) { throw "cdp-print.py failed with exit code $LASTEXITCODE" }
   Write-Host "Wrote assets/jordan-howson-cv.pdf"
 } finally {

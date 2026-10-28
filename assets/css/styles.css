@@ -212,7 +212,7 @@ p+p{margin-top:0.95rem;}
 /* print / source for assets/jordan-howson-cv.pdf (keeps the design) */
 @page{size:A4;margin:0;}
 @media print{
-  body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10.5pt;line-height:1.45;}
+  body{-webkit-print-color-adjust:exact;print-color-adjust:exact;font-size:10pt;line-height:1.45;}
   .doc{max-width:none;padding:12mm 14mm;}
   .nav,.skip-link,.foot,#contact,.head-links,.web-only{display:none;}
   .name{font-size:25pt;}
@@ -224,20 +224,20 @@ p+p{margin-top:0.95rem;}
   .entry-meta{font-size:9pt;}
 
   /* one consistent scale: section > entry > heading > paragraph */
-  section{margin-top:17pt;padding-top:17pt;}
+  section{margin-top:12pt;padding-top:12pt;}
   /* The second page starts with projects and repeats the top inset. */
   #work{break-before:page;margin-top:0;padding-top:12mm;border-top:0;}
   h2{margin-bottom:9pt;break-after:avoid;}
   p+p{margin-top:8pt;}
-  .entry+.entry{margin-top:15pt;padding-top:15pt;}
+  .entry+.entry{margin-top:12pt;padding-top:12pt;}
   .entry,.skills div{break-inside:avoid;}
   .entry-body h3{font-size:11pt;}
   .entry-sub{margin-top:2pt;}
   .entry ul{margin-top:8pt;padding-left:0;}
-  .entry li+li{margin-top:6pt;}
+  .entry li+li{margin-top:4pt;}
   .entry-desc{margin-top:2pt;}
   .entry-more{margin-top:6pt;}
   .skills div{padding-block:7.5pt;}
-  .hd{margin-top:9pt;}
+  .hd{margin-top:6pt;}
   .contact-line{margin-top:9pt;}
 }
